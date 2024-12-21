@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NVIDIA驱动安装 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>2.1 NVIDIA驱动安装</h1>
+
+            <div class="current-status">
+                <h2>当前状态检查</h2>
+                <div class="status-check">
+                    <button class="check-btn" onclick="checkDriver()">检查当前驱动</button>
+                    <div class="status-result">
+                        <pre id="driverInfo">
+运行 nvidia-smi 以查看当前驱动信息...
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="installation-steps">
+                <h2>安装步骤</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 下载驱动</h3>
+                        <ol>
+                            <li>访问 <a href="https://www.nvidia.com/download/index.aspx" target="_blank">NVIDIA官方下载页面</a></li>
+                            <li>选择显卡信息：
+                                <ul>
+                                    <li>产品类型：GeForce</li>
+                                    <li>产品系列：GeForce RTX 30 Series</li>
+                                    <li>产品：GeForce RTX 3060 Ti</li>
+                                    <li>操作系统：Windows 10/11 64-bit</li>
+                                </ul>
+                            </li>
+                            <li>点击"搜索"，下载最新版本的DCH驱动</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 准备工作</h3>
+                        <div class="checklist">
+                            <label class="check-item">
+                                <input type="checkbox">
+                                关闭所有正在运行的程序
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox">
+                                临时禁用杀毒软件
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox">
+                                断开网络连接（可选）
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 卸载旧驱动</h3>
+                        <ol>
+                            <li>打开控制面板 → 程序和功能</li>
+                            <li>卸载所有NVIDIA相关软件</li>
+                            <li>使用DDU（Display Driver Uninstaller）清理：
+                                <div class="code-block">
+                                    <p>DDU使用步骤：</p>
+                                    <ol>
+                                        <li>以安全模式启动Windows</li>
+                                        <li>运行DDU</li>
+                                        <li>选择"清除并重启"</li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>4. 安装新驱动</h3>
+                        <ol>
+                            <li>右键下载的驱动安装包</li>
+                            <li>选择"以管理员身份运行"</li>
+                            <li>选择安装选项：
+                                <ul>
+                                    <li>✓ 执行清洁安装</li>
+                                    <li>✓ 包含音频驱动</li>
+                                    <li>✓ 包含PhysX</li>
+                                </ul>
+                            </li>
+                            <li>等待安装完成并重启系统</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification">
+                <h2>验证安装</h2>
+                <ol>
+                    <li>打开命令提示符，运行：
+                        <div class="code-block">
+                            <code>nvidia-smi</code>
+                        </div>
+                    </li>
+                    <li>检查NVIDIA控制面板是否可以正常打开</li>
+                    <li>确认显示适配器信息是否正确</li>
+                </ol>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>安装失败，提示错误代码 43</summary>
+                        <div class="solution">
+                            <p>可能原因：驱动与Windows版本不兼容</p>
+                            <ol>
+                                <li>使用DDU完全清除当前驱动</li>
+                                <li>更新Windows到最新版本</li>
+                                <li>重新下载对应版本的驱动</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>安装后黑屏</summary>
+                        <div class="solution">
+                            <p>尝试以下步骤：</p>
+                            <ol>
+                                <li>进入安全模式</li>
+                                <li>使用DDU清除驱动</li>
+                                <li>安装较旧版本的驱动</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>驱动安装完成后，请继续安装CUDA工具包：</p>
+                <div class="button-group">
+                    <a href="cuda.html" class="btn btn-primary">安装CUDA</a>
+                    <a href="../faq/index.html#nvidia" class="btn btn-secondary">驱动常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,642 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --sidebar-width: 280px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    display: flex;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--primary-color);
+    color: white;
+    position: fixed;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 30px;
+    flex: 1;
+}
+
+.welcome-section {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-item {
+    margin: 10px 0;
+}
+
+.nav-item a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-item a:hover {
+    background-color: #34495e;
+}
+
+.version-info {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.quick-start, .system-requirements {
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        z-index: 1000;
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+} 
+
+/* 流程展示样式 */
+.process-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.flow-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.flow-item:hover {
+    transform: translateX(10px);
+}
+
+.flow-number {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.flow-content {
+    flex: 1;
+}
+
+.flow-content h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.flow-content p {
+    margin: 5px 0 0;
+    color: #666;
+}
+
+/* 按钮样式 */
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #34495e;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* 检查列表样式 */
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.check-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+/* 步骤列表样式 */
+.step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.step {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.step h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* 代码块样式 */
+.code-block {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-family: Consolas, monospace;
+}
+
+/* FAQ样式 */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+details {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+summary {
+    cursor: pointer;
+    padding: 10px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.solution {
+    padding: 15px;
+    margin-top: 10px;
+    background: white;
+    border-radius: 4px;
+}
+
+/* 状态检查样式 */
+.status-check {
+    margin: 20px 0;
+}
+
+.check-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.check-btn:hover {
+    background-color: #34495e;
+}
+
+.status-result {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-family: Consolas, monospace;
+}
+
+/* 工具列表样式 */
+.tool-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.tool-item {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tool-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.tool-item p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.tool-links {
+    display: flex;
+    gap: 10px;
+}
+
+.tool-links a {
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--secondary-color);
+    background: #f8f9fa;
+    transition: background-color 0.3s;
+}
+
+.tool-links a:hover {
+    background: #e9ecef;
+}
+
+/* FAQ页面样式 */
+.faq-categories {
+    margin: 2rem 0;
+}
+
+.category {
+    margin-bottom: 2rem;
+}
+
+.category h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.faq-item {
+    margin-bottom: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.faq-item h3 {
+    padding: 1rem;
+    margin: 0;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.faq-item h3:hover,
+.faq-item h3.hover {
+    background-color: #e9ecef;
+}
+
+.faq-item h3.active {
+    background-color: #e3f2fd;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.faq-item h3::after {
+    content: '▼';
+    position: absolute;
+    right: 1rem;
+    transition: transform 0.3s;
+}
+
+.faq-item h3.active::after {
+    transform: rotate(180deg);
+}
+
+.faq-item .answer {
+    padding: 1rem;
+    background-color: #fff;
+}
+
+.faq-item .code-block {
+    margin: 1rem 0;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.faq-item .code-block code {
+    padding: 1rem;
+    display: block;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+/* 执行环境提示样式 */
+.note {
+    position: relative;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db;
+    margin: 1rem 0;
+}
+
+.env-icon {
+    margin-right: 0.5rem;
+    font-size: 1.2em;
+}
+
+.help-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.help-btn:hover {
+    background-color: #2980b9;
+}
+
+.env-tooltip {
+    position: fixed;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 300px;
+    z-index: 1000;
+    display: none;
+}
+
+.env-tooltip.show {
+    display: block;
+}
+
+.env-tooltip h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.env-tooltip ol {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.env-tooltip li {
+    margin: 0.25rem 0;
+}
+
+/* 打开环境按钮样式 */
+.open-env-btn {
+    margin-left: 10px;
+    padding: 4px 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.open-env-btn:hover {
+    background-color: #2980b9;
+}
+
+/* 模态框样式 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.fallback-instructions {
+    margin-bottom: 20px;
+}
+
+.modal-close {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.modal-close:hover {
+    background-color: #2980b9;
+} 
+
+/* 保存选项样式 */
+.save-option {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.save-option label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.save-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.save-path {
+    margin: 8px 0 0 24px;
+    font-family: Consolas, monospace;
+    color: #666;
+    font-size: 14px;
+} 
+
+/* 快速打开按钮样式 */
+.quick-open-btn {
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.quick-open-btn:hover {
+    background-color: #2980b9;
+}
+
+/* 调整列表项样式 */
+.instructions ol li {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+} 
+
+/* 脚本预览样式 */
+.script-preview {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid #3498db;
+}
+
+.script-preview h5 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.script-preview pre {
+    margin: 0;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.script-preview code {
+    font-family: Consolas, monospace;
+    font-size: 14px;
+}
+
+.preview-note {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.preview-note ul {
+    margin: 5px 0 0 20px;
+    padding: 0;
+}
+
+/* 按钮组样式调整 */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.download-btn {
+    background-color: #27ae60;
+    color: white;
+}
+
+.download-btn:hover {
+    background-color: #219a52;
+}
+
+.show-manual {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.show-manual:hover {
+    background-color: #7f8c8d;
+} 

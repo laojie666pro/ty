@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型部署 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>4. 模型部署</h1>
+
+            <div class="prerequisites">
+                <h2>部署前准备</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已完成开发环境配置
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        GPU显存 >= 16GB
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        磁盘剩余空间 >= 50GB
+                    </label>
+                </div>
+            </div>
+
+            <div class="deployment-steps">
+                <h2>部署步骤</h2>
+                
+                <div class="step">
+                    <h3>1. 下载模型</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Windows命令提示符(CMD)</p>
+                        <p><strong>前提条件：</strong> 
+                            <ul>
+                                <li>已激活Python虚拟环境(venv)</li>
+                                <li>已安装huggingface_hub</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 安装Hugging Face工具：</strong></p>
+                        <code>pip install huggingface_hub</code>
+
+                        <p><strong>2. 登录Hugging Face（首次使用需要）：</strong></p>
+                        <code>huggingface-cli login</code>
+
+                        <p><strong>3. 下载模型：</strong></p>
+                        <code># 使用Python API下载
+from huggingface_hub import snapshot_download
+
+snapshot_download(
+    repo_id="model_name",
+    local_dir="./models",
+    token="your_token"  # 如果是私有模型需要提供token
+)</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>2. 模型转换</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Python交互式环境</p>
+                        <p><strong>前提条件：</strong> 已安装PyTorch和transformers</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 安装必要的包：</strong></p>
+                        <code>pip install torch transformers onnx onnxruntime-gpu</code>
+
+                        <p><strong>2. 转换为ONNX格式：</strong></p>
+                        <code># 在Python中执行
+from transformers import AutoModelForCausalLM
+import torch
+
+model = AutoModelForCausalLM.from_pretrained("./models/model_name")
+dummy_input = torch.randn(1, 512)
+
+torch.onnx.export(
+    model,
+    dummy_input,
+    "model.onnx",
+    opset_version=12,
+    input_names=['input'],
+    output_names=['output'],
+    dynamic_axes={
+        'input': {0: 'batch_size', 1: 'sequence'},
+        'output': {0: 'batch_size', 1: 'sequence'}
+    }
+)</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>3. 模型优化</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Python交互式环境</p>
+                        <p><strong>前提条件：</strong> 已安装optimum和onnxruntime</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 安装优化工具：</strong></p>
+                        <code>pip install optimum[onnxruntime]</code>
+
+                        <p><strong>2. 量化模型：</strong></p>
+                        <code># 在Python中执行
+from optimum.onnxruntime import ORTQuantizer
+from optimum.onnxruntime.configuration import AutoQuantizationConfig
+
+quantizer = ORTQuantizer.from_pretrained(model)
+qconfig = AutoQuantizationConfig.avx512_vnni(
+    is_static=False,
+    per_channel=True
+)
+
+# 量化模型
+quantizer.quantize(
+    save_dir="./quantized_model",
+    quantization_config=qconfig
+)</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>4. 部署服务</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Windows命令提示符(CMD)</p>
+                        <p><strong>前提条件：</strong> 已安装FastAPI和uvicorn</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 安装服务依赖：</strong></p>
+                        <code>pip install fastapi uvicorn</code>
+
+                        <p><strong>2. 创建服务文件(main.py)：</strong></p>
+                        <code># 使用VS Code创建并编辑main.py
+from fastapi import FastAPI
+from transformers import pipeline
+
+app = FastAPI()
+model = pipeline(
+    "text-generation",
+    model="./quantized_model",
+    device_map="auto"
+)
+
+@app.post("/predict")
+async def predict(data: dict):
+    try:
+        result = model(
+            data["input"],
+            max_length=512,
+            num_return_sequences=1
+        )
+        return {"prediction": result[0]["generated_text"]}
+    except Exception as e:
+        return {"error": str(e)}</code>
+
+                        <p><strong>3. 启动服务：</strong></p>
+                        <code>uvicorn main:app --host 0.0.0.0 --port 8000</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>模型部署完成后，继续配置数据采集系统：</p>
+                <div class="button-group">
+                    <a href="../data/index.html" class="btn btn-primary">数据采集系统</a>
+                    <a href="../dev/index.html" class="btn btn-secondary">返回开发环境</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

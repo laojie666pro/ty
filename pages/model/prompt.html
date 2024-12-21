@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提示词设计 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>4.3 提示词设计</h1>
+
+            <div class="prerequisites">
+                <h2>设计前准备</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已完成模型配置
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        了解体育赛事规则
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        准备数据分析框架
+                    </label>
+                </div>
+            </div>
+
+            <div class="prompt-section">
+                <h2>基础提示词模板</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 系统角色设定</h3>
+                        <div class="code-block">
+                            <code>你是一个专业的体育赛事分析师，擅长足球和篮球比赛预测。你有丰富的数据分析经验，能够综合考虑多个因素做出准确的预测。请基于提供的信息，给出详细的分析和预测建议。</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 输入信息模板</h3>
+                        <div class="code-block">
+                            <code>请分析以下比赛：
+
+[基本信息]
+联赛：{league_name}
+比赛：{home_team} vs {away_team}
+比赛时间：{match_time}
+比赛地点：{venue}
+
+[球队数据]
+主队近期战绩：{home_recent_form}
+客队近期战绩：{away_recent_form}
+历史交锋：{head_to_head}
+联赛排名：{league_standings}
+
+[状态信息]
+主队伤病情况：{home_injuries}
+客队伤病情况：{away_injuries}
+主队阵容变化：{home_lineup_changes}
+客队阵容变化：{away_lineup_changes}
+
+[环境因素]
+天气情况：{weather}
+场地状况：{pitch_condition}
+观众因素：{audience_factor}</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 分析框架模板</h3>
+                        <div class="code-block">
+                            <code>基于以上信息，我将从以下几个方面进行分析：
+
+1. 基本面分析
+   - 双方实力对比
+   - 近期状态评估
+   - 历史交锋分析
+
+2. 技术面分析
+   - 战术风格匹配
+   - 关键位置对比
+   - 替补阵容深度
+
+3. 环境因素分析
+   - 主场优势评估
+   - 天气影响分析
+   - 体能考量
+
+4. 综合预测
+   - 比分预测
+   - 胜率分析
+   - 关键因素提示</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="advanced-prompts">
+                <h2>高级提示词技巧</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 多轮对话设计</h3>
+                        <div class="code-block">
+                            <code># 第一轮：基础分析
+请先给出双方基本实力对比和近期状态分析。
+
+# 第二轮：深入分析
+基于上述分析，请重点关注[具体方面]的详细分析。
+
+# 第三轮：最终预测
+综合前面的分析，给出最终的预测建议和注意事项。</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 特殊情况处理</h3>
+                        <div class="code-block">
+                            <code># 伤病影响分析
+如果[关键球员]受伤，请分析：
+1. 替补球员能力评估
+2. 战术调整可能性
+3. 整体实力影响程度
+
+# 天气因素分析
+当遇到[特殊天气]时，请考虑：
+1. 对比赛风格的影响
+2. 对球员发挥的影响
+3. 特殊战术的可能性</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="optimization">
+                <h2>提示词优化</h2>
+                <div class="tip-list">
+                    <div class="tip">
+                        <h3>1. 精确性优化</h3>
+                        <ul>
+                            <li>使用具体数据支持</li>
+                            <li>明确分析维度</li>
+                            <li>量化预测结果</li>
+                        </ul>
+                    </div>
+                    <div class="tip">
+                        <h3>2. 可读性优化</h3>
+                        <ul>
+                            <li>结构化输出</li>
+                            <li>重点内容突出</li>
+                            <li>逻辑层次清晰</li>
+                        </ul>
+                    </div>
+                    <div class="tip">
+                        <h3>3. 实用性优化</h3>
+                        <ul>
+                            <li>针对性建议</li>
+                            <li>风险提示</li>
+                            <li>操作建议</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>提示词设计完成后，继续配置API服务：</p>
+                <div class="button-group">
+                    <a href="api.html" class="btn btn-primary">API配置</a>
+                    <a href="../faq/index.html#prompt" class="btn btn-secondary">提示词常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

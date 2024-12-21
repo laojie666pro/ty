@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型下载 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>4.1 模型下载</h1>
+
+            <div class="prerequisites">
+                <h2>下载前检查</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        剩余存储空间 > 20GB
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        科学上网工具可用
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已配置HuggingFace账号
+                    </label>
+                </div>
+            </div>
+
+            <div class="download-section">
+                <h2>模型下载</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. ChatGLM2-6B-int4</h3>
+                        <ol>
+                            <li>访问 <a href="https://huggingface.co/THUDM/chatglm2-6b-int4" target="_blank">ChatGLM2-6B-int4</a></li>
+                            <li>使用LMStudio下载：
+                                <div class="code-block">
+                                    <code>模型ID: THUDM/chatglm2-6b-int4</code>
+                                    <code>存储路径: D:\models\chatglm2-6b-int4</code>
+                                </div>
+                            </li>
+                            <li>下载大小：约4GB</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. Llama-2-7b-chat-hf-q4</h3>
+                        <ol>
+                            <li>访问 <a href="https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF" target="_blank">Llama-2-7B-Chat-GGUF</a></li>
+                            <li>使用LMStudio下载：
+                                <div class="code-block">
+                                    <code>模型ID: TheBloke/Llama-2-7B-Chat-GGUF</code>
+                                    <code>存储路径: D:\models\llama-2-7b-chat-q4</code>
+                                </div>
+                            </li>
+                            <li>选择q4_K_M.gguf版本（约4GB）</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. Vicuna-7b-q4</h3>
+                        <ol>
+                            <li>访问 <a href="https://huggingface.co/TheBloke/vicuna-7B-v1.5-GGUF" target="_blank">Vicuna-7B-GGUF</a></li>
+                            <li>使用LMStudio下载：
+                                <div class="code-block">
+                                    <code>模型ID: TheBloke/vicuna-7B-v1.5-GGUF</code>
+                                    <code>存储路径: D:\models\vicuna-7b-q4</code>
+                                </div>
+                            </li>
+                            <li>选择q4_K_M.gguf版本（约4GB）</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification">
+                <h2>验证下载</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 检查文件完整性</h3>
+                        <div class="code-block">
+                            <code>检查文件大小是否正确</code>
+                            <code>验证模型文件是否完整</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 测试模型加载</h3>
+                        <ol>
+                            <li>在LMStudio中加载模型</li>
+                            <li>检查是否有错误提示</li>
+                            <li>测试简单对话功能</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>下载速度过慢</summary>
+                        <div class="solution">
+                            <p>尝试以下方法：</p>
+                            <ul>
+                                <li>使用科学上网工具</li>
+                                <li>尝试不同时段下载</li>
+                                <li>使用下载管理器</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>文件下载中断</summary>
+                        <div class="solution">
+                            <p>解决方案：</p>
+                            <ul>
+                                <li>使用支持断点续传的下载工具</li>
+                                <li>检查网络连接稳定性</li>
+                                <li>尝试使用镜像站点</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>模型下载完成后，继续进行模型配置：</p>
+                <div class="button-group">
+                    <a href="config.html" class="btn btn-primary">配置模型</a>
+                    <a href="../faq/index.html#download" class="btn btn-secondary">下载常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

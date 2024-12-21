@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基础环境安装 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>2. 基础环境安装</h1>
+
+            <div class="install-steps">
+                <div class="step">
+                    <h2>1. Python安装</h2>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> Windows系统下的图形界面安装</p>
+                    </div>
+                    <ol>
+                        <li>访问 <a href="https://www.python.org/downloads/" target="_blank">Python官网</a></li>
+                        <li>下载Python 3.8或更高版本的Windows安装包</li>
+                        <li>运行安装包，勾选"Add Python to PATH"</li>
+                        <li>点击"Install Now"完成安装</li>
+                    </ol>
+                    <div class="verification">
+                        <p>验证安装：</p>
+                        <div class="code-block">
+                            <p><strong>在Windows命令提示符(CMD)中执行：</strong></p>
+                            <code>python --version
+pip --version</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2>2. CUDA安装</h2>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> Windows系统下的图形界面安装</p>
+                    </div>
+                    <ol>
+                        <li>访问 <a href="https://developer.nvidia.com/cuda-downloads" target="_blank">NVIDIA CUDA下载页面</a></li>
+                        <li>选择对应的Windows版本下载安装包</li>
+                        <li>运行安装包，按提示完成安装</li>
+                    </ol>
+                    <div class="verification">
+                        <p>验证安装：</p>
+                        <div class="code-block">
+                            <p><strong>在Windows命令提示符(CMD)中执行：</strong></p>
+                            <code>nvcc --version
+nvidia-smi</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2>3. 项目依赖安装</h2>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Windows命令提示符(CMD)</p>
+                        <p><strong>注意：</strong> 建议在项目目录下创建虚拟环境后再安装</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 创建虚拟环境（在项目目录下执行）：</strong></p>
+                        <code>python -m venv venv</code>
+                        
+                        <p><strong>2. 激活虚拟环境：</strong></p>
+                        <code># Windows CMD中：
+venv\Scripts\activate
+
+# Windows PowerShell中：
+.\venv\Scripts\Activate.ps1</code>
+                        
+                        <p><strong>3. 安装依赖：</strong></p>
+                        <code>pip install -r requirements.txt</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h2>4. Git安装</h2>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> Windows系统下的图形界面安装</p>
+                    </div>
+                    <ol>
+                        <li>访问 <a href="https://git-scm.com/downloads" target="_blank">Git官网</a></li>
+                        <li>下载Windows版本的安装包</li>
+                        <li>运行安装包，使用默认选项安装</li>
+                    </ol>
+                    <div class="verification">
+                        <p>验证安装：</p>
+                        <div class="code-block">
+                            <p><strong>在Windows命令提示符(CMD)或VS Code终端中执行：</strong></p>
+                            <code>git --version</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>基础环境安装完成后，继续配置开发环境：</p>
+                <div class="button-group">
+                    <a href="../dev/index.html" class="btn btn-primary">开发环境配置</a>
+                    <a href="../config/index.html" class="btn btn-secondary">返回配置检查</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API配置 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>4.4 API配置</h1>
+
+            <div class="prerequisites">
+                <h2>配置前准备</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已完成提示词设计
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        FastAPI环境就绪
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        准备好API密钥
+                    </label>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h2>API服务配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 基础配置</h3>
+                        <div class="code-block">
+                            <code># 服务配置
+HOST: 0.0.0.0
+PORT: 8000
+WORKERS: 4
+TIMEOUT: 300
+
+# 安全配置
+API_KEY: your_api_key
+RATE_LIMIT: 60/minute
+MAX_TOKENS: 4096</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 路由设置</h3>
+                        <div class="code-block">
+                            <code>from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+app = FastAPI()
+
+@app.post("/predict")
+async def predict_match(request: MatchRequest):
+    try:
+        result = await process_prediction(request)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 请求模型</h3>
+                        <div class="code-block">
+                            <code>class MatchRequest(BaseModel):
+    league_name: str
+    home_team: str
+    away_team: str
+    match_time: str
+    venue: str
+    home_recent_form: list
+    away_recent_form: list
+    head_to_head: list
+    league_standings: dict
+    home_injuries: list
+    away_injuries: list
+    weather: str
+    pitch_condition: str</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="deployment">
+                <h2>部署说明</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 启动服务</h3>
+                        <div class="code-block">
+                            <code># 开发环境
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# 生产环境
+uvicorn main:app --workers 4 --host 0.0.0.0 --port 8000</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 服务监控</h3>
+                        <div class="code-block">
+                            <code># 日志配置
+LOG_LEVEL: INFO
+LOG_FILE: api.log
+ROTATION: "500 MB"
+
+# 监控指标
+METRICS_ENABLED: true
+METRICS_PORT: 9000</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-docs">
+                <h2>API文档</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 预测接口</h3>
+                        <div class="code-block">
+                            <code>POST /predict
+Content-Type: application/json
+Authorization: Bearer your_api_key
+
+{
+    "league_name": "英超",
+    "home_team": "利物浦",
+    "away_team": "曼城",
+    "match_time": "2024-03-21 20:00:00",
+    "venue": "安菲尔德",
+    "home_recent_form": ["W", "W", "D", "L", "W"],
+    "away_recent_form": ["W", "W", "W", "D", "W"],
+    "head_to_head": [
+        {"date": "2023-11-25", "result": "2-1"},
+        {"date": "2023-04-01", "result": "4-1"}
+    ],
+    "weather": "晴天",
+    "pitch_condition": "良好"
+}</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 响应格式</h3>
+                        <div class="code-block">
+                            <code>{
+    "status": "success",
+    "data": {
+        "prediction": {
+            "home_win_prob": 0.45,
+            "draw_prob": 0.25,
+            "away_win_prob": 0.30,
+            "predicted_score": "2-1",
+            "confidence": 0.75
+        },
+        "analysis": {
+            "key_factors": [...],
+            "recommendations": [...],
+            "risk_factors": [...]
+        }
+    },
+    "processing_time": "1.2s"
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>服务启动失败</summary>
+                        <div class="solution">
+                            <p>检查以下内容：</p>
+                            <ul>
+                                <li>端口是否被占用</li>
+                                <li>环境变量是否正确</li>
+                                <li>依赖包是否完整</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>请求超时</summary>
+                        <div class="solution">
+                            <p>可能原因：</p>
+                            <ul>
+                                <li>模型加载时间过长</li>
+                                <li>系统资源不足</li>
+                                <li>网络延迟过高</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>API服务配置完成后，继续进行数据采集系统配置：</p>
+                <div class="button-group">
+                    <a href="../data/index.html" class="btn btn-primary">数据采集配置</a>
+                    <a href="../faq/index.html#api" class="btn btn-secondary">API常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

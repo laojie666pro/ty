@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爬虫系统 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>5.2 爬虫系统</h1>
+
+            <div class="crawler-components">
+                <h2>系统组件</h2>
+                <div class="component-list">
+                    <div class="component-item">
+                        <h3>1. 调度器</h3>
+                        <div class="code-block">
+                            <code># Celery调度配置
+from celery import Celery
+from celery.schedules import crontab
+
+app = Celery('crawler')
+app.conf.update(
+    broker_url='redis://localhost:6379/0',
+    result_backend='redis://localhost:6379/1',
+    timezone='Asia/Shanghai',
+    enable_utc=True
+)
+
+# 定时任务配置
+app.conf.beat_schedule = {
+    'crawl-live-matches': {
+        'task': 'tasks.crawl_live_matches',
+        'schedule': 300.0  # 每5分钟
+    },
+    'crawl-historical-data': {
+        'task': 'tasks.crawl_historical',
+        'schedule': crontab(hour=2, minute=0)  # 每天凌晨2点
+    }
+}</code>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <h3>2. 代理池</h3>
+                        <div class="code-block">
+                            <code># 代理池管理
+class ProxyPool:
+    def __init__(self, redis_client, min_size=100):
+        self.redis = redis_client
+        self.min_size = min_size
+        
+    async def get_proxy(self):
+        # 获取可用代理
+        proxy = await self.redis.srandmember('proxy_pool')
+        if not proxy:
+            await self.refill_pool()
+            proxy = await self.redis.srandmember('proxy_pool')
+        return proxy
+        
+    async def refill_pool(self):
+        # 补充代理
+        current_size = await self.redis.scard('proxy_pool')
+        if current_size < self.min_size:
+            new_proxies = await self.fetch_proxies()
+            if new_proxies:
+                await self.redis.sadd('proxy_pool', *new_proxies)
+                
+    async def validate_proxy(self, proxy):
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    'http://httpbin.org/ip',
+                    proxy=f'http://{proxy}',
+                    timeout=5
+                ) as response:
+                    return response.status == 200
+        except:
+            return False</code>
+                        </div>
+                    </div>
+
+                    <div class="component-item">
+                        <h3>3. 爬虫节点</h3>
+                        <div class="code-block">
+                            <code># 分布式爬虫节点
+from scrapy.crawler import CrawlerRunner
+from twisted.internet import reactor
+import scrapy
+
+class MatchCrawler:
+    def __init__(self):
+        self.runner = CrawlerRunner({
+            'USER_AGENT': 'Mozilla/5.0 ...',
+            'CONCURRENT_REQUESTS': 32,
+            'DOWNLOAD_DELAY': 1,
+            'COOKIES_ENABLED': False
+        })
+        
+    def start_crawl(self):
+        d = self.runner.crawl(LiveMatchSpider)
+        d.addBoth(lambda _: reactor.stop())
+        reactor.run()
+        
+class LiveMatchSpider(scrapy.Spider):
+    name = 'live_matches'
+    
+    def start_requests(self):
+        urls = self.get_match_urls()
+        for url in urls:
+            yield scrapy.Request(
+                url,
+                callback=self.parse,
+                errback=self.handle_error,
+                dont_filter=True
+            )
+            
+    def parse(self, response):
+        # 解析比赛数据
+        match_data = self.extract_match_data(response)
+        if match_data:
+            self.save_to_database(match_data)</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="error-handling">
+                <h2>错误处理</h2>
+                <div class="error-list">
+                    <div class="error-item">
+                        <h3>1. 重试机制</h3>
+                        <div class="code-block">
+                            <code># 重试装饰器
+from functools import wraps
+import asyncio
+
+def retry_on_failure(max_retries=3, delay=1):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            for attempt in range(max_retries):
+                try:
+                    return await func(*args, **kwargs)
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise e
+                    await asyncio.sleep(delay * (attempt + 1))
+            return None
+        return wrapper
+    return decorator
+
+@retry_on_failure(max_retries=3)
+async def fetch_data(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            return await response.json()</code>
+                        </div>
+                    </div>
+
+                    <div class="error-item">
+                        <h3>2. 异常监控</h3>
+                        <div class="code-block">
+                            <code># 异常监控系统
+from prometheus_client import Counter, Histogram
+import time
+
+# 监控指标
+SCRAPE_ERRORS = Counter(
+    'scrape_errors_total',
+    'Total scraping errors',
+    ['spider', 'error_type']
+)
+
+SCRAPE_DURATION = Histogram(
+    'scrape_duration_seconds',
+    'Time spent scraping',
+    ['spider']
+)
+
+class MonitoredSpider(scrapy.Spider):
+    def start_requests(self):
+        with SCRAPE_DURATION.labels(self.name).time():
+            yield from super().start_requests()
+            
+    def handle_error(self, failure):
+        SCRAPE_ERRORS.labels(
+            spider=self.name,
+            error_type=failure.type.__name__
+        ).inc()</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>爬虫系统配置完成后，继续配置存储系统：</p>
+                <div class="button-group">
+                    <a href="storage.html" class="btn btn-primary">存储系统</a>
+                    <a href="sources.html" class="btn btn-secondary">返回数据源</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

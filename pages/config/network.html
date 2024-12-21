@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络要求 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>1.3 网络要求</h1>
+            
+            <div class="network-specs">
+                <h2>基本要求</h2>
+                <table class="specs-table">
+                    <tr>
+                        <th>项目</th>
+                        <th>最低要求</th>
+                        <th>推荐配置</th>
+                    </tr>
+                    <tr>
+                        <td>带宽</td>
+                        <td>50Mbps</td>
+                        <td>≥100Mbps</td>
+                    </tr>
+                    <tr>
+                        <td>延迟</td>
+                        <td>＜100ms</td>
+                        <td>＜50ms</td>
+                    </tr>
+                    <tr>
+                        <td>稳定性</td>
+                        <td>99%</td>
+                        <td>99.9%</td>
+                    </tr>
+                </table>
+
+                <h2>网络访问</h2>
+                <div class="access-list">
+                    <h3>需要访问的网站</h3>
+                    <ul>
+                        <li>GitHub (模型和代码下载)</li>
+                        <li>PyPI (Python包安装)</li>
+                        <li>HuggingFace (模型下载)</li>
+                        <li>体育数据源网站</li>
+                    </ul>
+                </div>
+
+                <div class="proxy-setup">
+                    <h3>代理设置</h3>
+                    <p>由于部分资源需要科学上网，建议配置以下代理：</p>
+                    <ul>
+                        <li>系统全局代理</li>
+                        <li>Git代理设置</li>
+                        <li>pip代理设置</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="network-test">
+                <h2>网络测试</h2>
+                <div class="test-items">
+                    <button class="test-btn" onclick="testSpeed()">测试下载速度</button>
+                    <button class="test-btn" onclick="testLatency()">测试网络延迟</button>
+                    <button class="test-btn" onclick="testAccess()">测试资源可访问性</button>
+                </div>
+                <div id="test-results" class="test-results">
+                    <!-- 测试结果将在这里显示 -->
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>注意：</strong> 
+                <ul>
+                    <li>建议使用有线网络连接</li>
+                    <li>确保网络防火墙不会阻止必要的连接</li>
+                    <li>准备备用网络方案</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

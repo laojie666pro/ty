@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据库配置 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>3.2 数据库配置</h1>
+
+            <div id="mongodb" class="database-section">
+                <h2>MongoDB 配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 下载安装</h3>
+                        <ol>
+                            <li>访问 <a href="https://www.mongodb.com/try/download/community" target="_blank">MongoDB下载页面</a></li>
+                            <li>选择版本：
+                                <ul>
+                                    <li>Version: 6.0 (Current)</li>
+                                    <li>Platform: Windows</li>
+                                    <li>Package: MSI</li>
+                                </ul>
+                            </li>
+                            <li>下载并运行安装程序</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 安装配置</h3>
+                        <ol>
+                            <li>选择"Complete" 安装类型</li>
+                            <li>配置数据目录：
+                                <div class="code-block">
+                                    <code>数据目录：D:\MongoDB\data</code>
+                                    <code>日志目录：D:\MongoDB\log</code>
+                                </div>
+                            </li>
+                            <li>安装 MongoDB Compass（可视化工具）</li>
+                            <li>将MongoDB安装为Windows服务</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 安全配置</h3>
+                        <ol>
+                            <li>创建管理员账户：
+                                <div class="code-block">
+                                    <code>use admin</code>
+                                    <code>db.createUser({
+  user: "admin",
+  pwd: "your_password",
+  roles: ["root"]
+})</code>
+                                </div>
+                            </li>
+                            <li>启用身份验证：
+                                <div class="code-block">
+                                    <code>在 mongod.cfg 添加：
+security:
+  authorization: enabled</code>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div id="redis" class="database-section">
+                <h2>Redis 配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 下载安装</h3>
+                        <ol>
+                            <li>访问 <a href="https://github.com/microsoftarchive/redis/releases" target="_blank">Redis for Windows</a></li>
+                            <li>下载最新MSI安装包</li>
+                            <li>运行安装程序</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 基础配置</h3>
+                        <ol>
+                            <li>配置Redis服务：
+                                <div class="code-block">
+                                    <code>端口: 6379</code>
+                                    <code>最大内存: 4GB</code>
+                                    <code>持久化: 开启</code>
+                                </div>
+                            </li>
+                            <li>编辑 redis.windows.conf：
+                                <div class="code-block">
+                                    <code>maxmemory 4gb</code>
+                                    <code>maxmemory-policy allkeys-lru</code>
+                                    <code>appendonly yes</code>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 性能优化</h3>
+                        <div class="code-block">
+                            <code># 配置建议
+tcp-keepalive 60
+timeout 300
+databases 16
+save 900 1
+save 300 10
+save 60 10000</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification">
+                <h2>验证配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. MongoDB验证</h3>
+                        <div class="code-block">
+                            <code>mongosh --port 27017 -u admin -p your_password --authenticationDatabase admin</code>
+                            <code>db.serverStatus()</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. Redis验证</h3>
+                        <div class="code-block">
+                            <code>redis-cli</code>
+                            <code>ping</code>
+                            <code>info</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>MongoDB服务无法启动</summary>
+                        <div class="solution">
+                            <p>检查以下内容：</p>
+                            <ol>
+                                <li>数据目录权限</li>
+                                <li>配置文件语法</li>
+                                <li>端口是否被占用</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>Redis内存占用过高</summary>
+                        <div class="solution">
+                            <p>调整以下设置：</p>
+                            <ul>
+                                <li>降低maxmemory值</li>
+                                <li>调整过期策略</li>
+                                <li>清理不必要的数据</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>数据库配置完成后，继续配置其他依赖环境：</p>
+                <div class="button-group">
+                    <a href="dependencies.html" class="btn btn-primary">配置依赖环境</a>
+                    <a href="../faq/index.html#database" class="btn btn-secondary">数据库常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

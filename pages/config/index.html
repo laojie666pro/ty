@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统配置检查 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 保持与主页相同的导航结构 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>1. 系统配置检查</h1>
+            <div class="section-links">
+                <a href="hardware.html">1.1 硬件要求</a>
+                <a href="software.html">1.2 软件要求</a>
+                <a href="network.html">1.3 网络要求</a>
+            </div>
+            
+            <div class="overview">
+                <h2>概述</h2>
+                <p>在开始部署之前，请确保您的系统满足以下基本要求：</p>
+                <ul>
+                    <li>硬件配置满足最低要求</li>
+                    <li>操作系统为最新版本的Windows 10/11</li>
+                    <li>网络环境稳定且可访问必要的资源</li>
+                </ul>
+            </div>
+
+            <div class="checklist">
+                <h2>配置检查清单</h2>
+                <form id="configCheck">
+                    <div class="check-item">
+                        <input type="checkbox" id="cpu">
+                        <label for="cpu">CPU: AMD 5600G 或更高</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="ram">
+                        <label for="ram">内存: 40GB 或更高</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="gpu">
+                        <label for="gpu">显卡: RTX 3060 Ti (8GB) 或更高</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="storage">
+                        <label for="storage">存储: 1TB SSD</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="os">
+                        <label for="os">Windows 10/11 最新版本</label>
+                    </div>
+                    <div class="check-item">
+                        <input type="checkbox" id="network">
+                        <label for="network">网络带宽 ≥ 100Mbps</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

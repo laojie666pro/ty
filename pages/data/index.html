@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据采集系统 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>5. 数据采集系统</h1>
+
+            <div class="prerequisites">
+                <h2>系统要求</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        CPU: 8核以上
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        内存: 16GB以上
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        存储: 500GB以上
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        带宽: 100Mbps以上
+                    </label>
+                </div>
+            </div>
+
+            <div class="system-overview">
+                <h2>系统概述</h2>
+                <div class="overview-flow">
+                    <div class="flow-item">
+                        <div class="flow-number">1</div>
+                        <div class="flow-content">
+                            <h3>数据源配置</h3>
+                            <div class="note">
+                                <p><strong>执行环境：</strong> VS Code编辑器和终端</p>
+                                <p><strong>前提条件：</strong> 已激活Python虚拟环境(venv)</p>
+                            </div>
+                            <div class="code-block">
+                                <p><strong>1. 安装依赖：</strong></p>
+                                <code>pip install requests aiohttp pydantic</code>
+
+                                <p><strong>2. 配置数据源：</strong></p>
+                                <code># 在VS Code中创建config.py
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class APIConfig:
+    name: str
+    base_url: str
+    api_key: str
+    rate_limit: int</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flow-item">
+                        <div class="flow-number">2</div>
+                        <div class="flow-content">
+                            <h3>爬虫系统</h3>
+                            <div class="note">
+                                <p><strong>执行环境：</strong> VS Code终端或Windows命令提示符(CMD)</p>
+                                <p><strong>前提条件：</strong> 已安装Scrapy和Redis</p>
+                            </div>
+                            <div class="code-block">
+                                <p><strong>1. 安装爬虫依赖：</strong></p>
+                                <code>pip install scrapy redis scrapy-redis</code>
+
+                                <p><strong>2. 创建Scrapy项目：</strong></p>
+                                <code># 在项目根目录执行
+scrapy startproject sports_crawler
+cd sports_crawler
+scrapy genspider match_spider example.com</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flow-item">
+                        <div class="flow-number">3</div>
+                        <div class="flow-content">
+                            <h3>存储系统</h3>
+                            <div class="note">
+                                <p><strong>执行环境：</strong> Windows PowerShell（管理员）</p>
+                                <p><strong>前提条件：</strong> 已安装MongoDB和Redis</p>
+                            </div>
+                            <div class="code-block">
+                                <p><strong>1. 启动MongoDB服务：</strong></p>
+                                <code>net start MongoDB</code>
+
+                                <p><strong>2. 启动Redis服务：</strong></p>
+                                <code>net start Redis</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>开始配置</h2>
+                <p>请从数据源配置开始：</p>
+                <div class="button-group">
+                    <a href="sources.html" class="btn btn-primary">数据源配置</a>
+                    <a href="../model/index.html" class="btn btn-secondary">返回模型部署</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

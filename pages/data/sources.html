@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据源配置 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>5.1 数据源配置</h1>
+
+            <div class="data-sources">
+                <h2>数据源类型</h2>
+                <div class="source-list">
+                    <div class="source-item">
+                        <h3>1. API数据源</h3>
+                        <div class="code-block">
+                            <code># API配置示例
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class APIConfig:
+    name: str
+    base_url: str
+    api_key: str
+    rate_limit: int  # 请求/分钟
+    timeout: int = 30
+    retry_times: int = 3
+    
+# 配置实例
+api_configs = {
+    'live_scores': APIConfig(
+        name='实时比分',
+        base_url='https://api.sports.com/v1',
+        api_key='your_api_key',
+        rate_limit=60
+    ),
+    'historical': APIConfig(
+        name='历史数据',
+        base_url='https://api.history.com/v2',
+        api_key='your_api_key',
+        rate_limit=100
+    )}</code>
+                        </div>
+                    </div>
+
+                    <div class="source-item">
+                        <h3>2. 网页数据源</h3>
+                        <div class="code-block">
+                            <code># Scrapy爬虫配置
+class MatchSpider(scrapy.Spider):
+    name = 'match_spider'
+    allowed_domains = ['sports.example.com']
+    
+    custom_settings = {
+        'DOWNLOAD_DELAY': 2,
+        'CONCURRENT_REQUESTS': 16,
+        'COOKIES_ENABLED': False,
+        'DOWNLOADER_MIDDLEWARES': {
+            'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+            'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+            'project.middlewares.ProxyMiddleware': 100
+        }
+    }
+    
+    def start_requests(self):
+        urls = [
+            'https://sports.example.com/matches',
+            'https://sports.example.com/stats'
+        ]
+        for url in urls:
+            yield scrapy.Request(
+                url=url,
+                callback=self.parse,
+                meta={'proxy': get_proxy()}
+            )</code>
+                        </div>
+                    </div>
+
+                    <div class="source-item">
+                        <h3>3. 数据验证</h3>
+                        <div class="code-block">
+                            <code># 数据验证模型
+from pydantic import BaseModel, validator
+from datetime import datetime
+from typing import List, Optional
+
+class MatchData(BaseModel):
+    match_id: str
+    home_team: str
+    away_team: str
+    start_time: datetime
+    score: Optional[str]
+    stats: dict
+    
+    @validator('score')
+    def validate_score(cls, v):
+        if v and not v.count('-') == 1:
+            raise ValueError('Invalid score format')
+        return v
+    
+    @validator('stats')
+    def validate_stats(cls, v):
+        required_fields = {'possession', 'shots', 'corners'}
+        if not all(field in v for field in required_fields):
+            raise ValueError('Missing required stats fields')
+        return v</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-processing">
+                <h2>数据处理</h2>
+                <div class="processing-list">
+                    <div class="processing-item">
+                        <h3>1. 数据清洗</h3>
+                        <div class="code-block">
+                            <code># 数据清洗流程
+class DataCleaner:
+    def clean_match_data(self, data: dict) -> dict:
+        # 移除空字段
+        data = {k: v for k, v in data.items() if v is not None}
+        
+        # 标准化团队名称
+        data['home_team'] = self.normalize_team_name(data['home_team'])
+        data['away_team'] = self.normalize_team_name(data['away_team'])
+        
+        # 转换时间格式
+        if 'start_time' in data:
+            data['start_time'] = self.parse_datetime(data['start_time'])
+            
+        # 处理统计数据
+        if 'stats' in data:
+            data['stats'] = self.clean_stats(data['stats'])
+            
+        return data
+        
+    def normalize_team_name(self, name: str) -> str:
+        # 移除特殊字符
+        name = re.sub(r'[^\w\s]', '', name)
+        # 统一大小写
+        return name.lower().strip()</code>
+                        </div>
+                    </div>
+
+                    <div class="processing-item">
+                        <h3>2. 数据转换</h3>
+                        <div class="code-block">
+                            <code># 数据格式转换
+class DataTransformer:
+    def transform_to_model_input(self, match_data: dict) -> dict:
+        """转换比赛数据为模型输入格式"""
+        features = {
+            'team_stats': self._get_team_stats(match_data),
+            'historical': self._get_historical_data(
+                match_data['home_team'],
+                match_data['away_team']
+            ),
+            'weather': self._get_weather_data(match_data),
+            'form': self._calculate_form(match_data)
+        }
+        
+        return {
+            'match_id': match_data['match_id'],
+            'features': features,
+            'timestamp': datetime.now()
+        }</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>数据源配置完成后，继续配置爬虫系统：</p>
+                <div class="button-group">
+                    <a href="crawler.html" class="btn btn-primary">爬虫系统</a>
+                    <a href="index.html" class="btn btn-secondary">返回概述</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

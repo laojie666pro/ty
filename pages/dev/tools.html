@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发工具安装 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>3.1 开发工具安装</h1>
+
+            <div id="lmstudio" class="tool-section">
+                <h2>LMStudio 安装配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 下载安装</h3>
+                        <ol>
+                            <li>访问 <a href="https://lmstudio.ai/" target="_blank">LMStudio官网</a></li>
+                            <li>下载最新版本</li>
+                            <li>运行安装程序：
+                                <ul>
+                                    <li>选择安装路径（建议安装在非系统盘）</li>
+                                    <li>创建桌面快捷方式</li>
+                                    <li>添加到开始菜单</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 初始配置</h3>
+                        <ol>
+                            <li>首次启动设置：
+                                <ul>
+                                    <li>选择中文界面</li>
+                                    <li>设置模型存储路径</li>
+                                    <li>配置GPU加速</li>
+                                </ul>
+                            </li>
+                            <li>性能设置：
+                                <ul>
+                                    <li>最大内存使用：28GB（系统内存的70%）</li>
+                                    <li>GPU内存限制：6GB</li>
+                                    <li>线程数：6</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. API配置</h3>
+                        <div class="code-block">
+                            <p>设置API访问参数：</p>
+                            <code>端口: 8080</code>
+                            <code>主机: localhost</code>
+                            <code>并发数: 5</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="verification">
+                    <h3>验证安装</h3>
+                    <ol>
+                        <li>检查GPU是否被正确识别</li>
+                        <li>测试模型加载功能</li>
+                        <li>验证API接口可访问性</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div id="vscode" class="tool-section">
+                <h2>Visual Studio Code 安装（可选）</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 安装VSCode</h3>
+                        <ol>
+                            <li>访问 <a href="https://code.visualstudio.com/" target="_blank">VSCode官网</a></li>
+                            <li>下载Windows版本</li>
+                            <li>运行安装程序，选择：
+                                <ul>
+                                    <li>✓ 添加到PATH</li>
+                                    <li>✓ 添加到右键菜单</li>
+                                    <li>✓ 注册为默认编辑器</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 安装扩展</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>Jupyter</li>
+                            <li>Python Indent</li>
+                            <li>GitLens</li>
+                            <li>Chinese Language Pack</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>LMStudio无法识别GPU</summary>
+                        <div class="solution">
+                            <p>检查以下内容：</p>
+                            <ol>
+                                <li>NVIDIA驱动是否最新</li>
+                                <li>CUDA是否正确安装</li>
+                                <li>是否有其他程序占用GPU</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>内存分配错误</summary>
+                        <div class="solution">
+                            <p>调整以下设置：</p>
+                            <ul>
+                                <li>降低最大内存使用限制</li>
+                                <li>减少并发数</li>
+                                <li>使用更小的模型</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>开发工具安装完成后，继续配置数据库环境：</p>
+                <div class="button-group">
+                    <a href="database.html" class="btn btn-primary">配置数据库</a>
+                    <a href="../faq/index.html#tools" class="btn btn-secondary">工具常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

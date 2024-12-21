@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUDA安装 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>2.2 CUDA安装</h1>
+
+            <div class="prerequisites">
+                <h2>安装前检查</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已安装最新NVIDIA驱动
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        系统盘剩余空间 > 20GB
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已安装Visual Studio或Build Tools
+                    </label>
+                </div>
+            </div>
+
+            <div class="installation-steps">
+                <h2>安装步骤</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 下载CUDA 11.7</h3>
+                        <ol>
+                            <li>访问 <a href="https://developer.nvidia.com/cuda-11-7-0-download-archive" target="_blank">CUDA 11.7下载页面</a></li>
+                            <li>选择下载选项：
+                                <ul>
+                                    <li>操作系统：Windows</li>
+                                    <li>架构：x86_64</li>
+                                    <li>版本：11.7.0</li>
+                                    <li>安装类型：exe (local)</li>
+                                </ul>
+                            </li>
+                            <li>下载安装程序（约3GB）</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 安装CUDA</h3>
+                        <ol>
+                            <li>以管理员身份运行安装程序</li>
+                            <li>选择安装类型：自定义安装</li>
+                            <li>确保以下组件被选中：
+                                <ul>
+                                    <li>CUDA Runtime and Development</li>
+                                    <li>Visual Studio Integration</li>
+                                    <li>CUDA Samples</li>
+                                </ul>
+                            </li>
+                            <li>选择安装路径（建议默认路径）</li>
+                            <li>等待安装完成</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 安装cuDNN</h3>
+                        <ol>
+                            <li>访问 <a href="https://developer.nvidia.com/cudnn" target="_blank">cuDNN下载页面</a>（需要注册NVIDIA账号）</li>
+                            <li>下载对应CUDA 11.7的cuDNN版本</li>
+                            <li>解压下载的文件</li>
+                            <li>复制文件到CUDA目录：
+                                <div class="code-block">
+                                    <code>将解压后的 cuda 文件夹中的内容复制到 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7</code>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>4. 环境变量配置</h3>
+                        <div class="code-block">
+                            <p>确保以下路径已添加到系统环境变量 Path：</p>
+                            <code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\bin</code>
+                            <code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\libnvvp</code>
+                            <code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification">
+                <h2>验证安装</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 检查CUDA版本</h3>
+                        <div class="code-block">
+                            <code>nvcc --version</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 编译CUDA示例</h3>
+                        <div class="code-block">
+                            <code>cd "C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.7"</code>
+                            <code>make</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 运行带宽测试</h3>
+                        <div class="code-block">
+                            <code>cd bin\win64\release</code>
+                            <code>bandwidthTest.exe</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>nvcc命令未找到</summary>
+                        <div class="solution">
+                            <p>检查环境变量是否正确配置：</p>
+                            <ol>
+                                <li>打开系统环境变量设置</li>
+                                <li>检查Path变量中的CUDA路径</li>
+                                <li>重新启动命令提示符</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>CUDA示例编译失败</summary>
+                        <div class="solution">
+                            <p>可能原因：</p>
+                            <ul>
+                                <li>Visual Studio未正确安装</li>
+                                <li>缺少Windows SDK</li>
+                                <li>PATH环境变量配置错误</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>CUDA环境配置完成后，继续安装Python环境：</p>
+                <div class="button-group">
+                    <a href="python.html" class="btn btn-primary">安装Python</a>
+                    <a href="../faq/index.html#cuda" class="btn btn-secondary">CUDA常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

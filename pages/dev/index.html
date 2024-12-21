@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发环境配置 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>3. 开发环境配置</h1>
+
+            <div class="prerequisites">
+                <h2>配置前准备</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已完成基础环境安装
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已安装Git
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已安装VSCode或PyCharm
+                    </label>
+                </div>
+            </div>
+
+            <div class="setup-steps">
+                <h2>配置步骤</h2>
+                
+                <div class="step">
+                    <h3>1. Python开发环境</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Windows命令提示符(CMD)</p>
+                        <p><strong>前提条件：</strong> 已激活Python虚拟环境(venv)</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>安装开发依赖：</strong></p>
+                        <code># 确保在项目根目录下执行
+pip install -r requirements-dev.txt</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>2. IDE配置</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code编辑器</p>
+                        <p><strong>操作步骤：</strong> 按Ctrl+Shift+P打开命令面板，输入"settings.json"</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>将以下配置复制到VS Code的settings.json文件中：</strong></p>
+                        <code>{
+    "python.defaultInterpreterPath": "./venv/bin/python",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "editor.rulers": [88],
+    "files.trimTrailingWhitespace": true
+}</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>3. Git配置</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Windows命令提示符(CMD)</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 配置用户信息：</strong></p>
+                        <code>git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"</code>
+
+                        <p><strong>2. 配置行尾处理（Windows系统必须）：</strong></p>
+                        <code>git config --global core.autocrlf input</code>
+
+                        <p><strong>3. 在项目根目录创建.gitignore文件：</strong></p>
+                        <code># 使用VS Code或记事本创建并添加以下内容：
+venv/
+__pycache__/
+*.pyc
+.env
+.vscode/
+.idea/
+*.log
+dist/
+build/
+*.egg-info/</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>4. 预提交钩子配置</h3>
+                    <div class="note">
+                        <p><strong>执行环境：</strong> VS Code的终端或Windows命令提示符(CMD)</p>
+                        <p><strong>前提条件：</strong> 已激活Python虚拟环境(venv)</p>
+                    </div>
+                    <div class="code-block">
+                        <p><strong>1. 安装pre-commit：</strong></p>
+                        <code>pip install pre-commit</code>
+
+                        <p><strong>2. 在项目根目录创建.pre-commit-config.yaml文件：</strong></p>
+                        <code># 使用VS Code或记事本创建并添加以下内容：
+repos:
+-   repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+    -   id: black
+        language_version: python3.8
+-   repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+    -   id: isort
+-   repo: https://github.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+    -   id: flake8
+        additional_dependencies: [flake8-docstrings]</code>
+
+                        <p><strong>3. 安装git hooks：</strong></p>
+                        <code>pre-commit install</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>开发环境配置完成后，继续进行模型部署：</p>
+                <div class="button-group">
+                    <a href="../model/index.html" class="btn btn-primary">模型部署</a>
+                    <a href="../install/index.html" class="btn btn-secondary">返回安装</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常见问题 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>6. 常见问题</h1>
+
+            <div class="faq-categories">
+                <div class="category">
+                    <h2>环境问题</h2>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <h3>Q: CUDA版本不匹配怎么办？</h3>
+                            <div class="answer">
+                                <p>1. 检查CUDA版本：</p>
+                                <div class="code-block">
+                                    <code>nvcc --version
+nvidia-smi</code>
+                                </div>
+                                <p>2. 安装匹配版本的PyTorch：</p>
+                                <div class="code-block">
+                                    <code>pip install torch==2.0.0+cu117 -f https://download.pytorch.org/whl/torch_stable.html</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>Q: 内存不足如何处理？</h3>
+                            <div class="answer">
+                                <p>1. 启用梯度检查点：</p>
+                                <div class="code-block">
+                                    <code>model.gradient_checkpointing_enable()</code>
+                                </div>
+                                <p>2. 使用混合精度训练：</p>
+                                <div class="code-block">
+                                    <code>from torch.cuda.amp import autocast
+
+with autocast():
+    outputs = model(inputs)</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h2>模型问题</h2>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <h3>Q: 模型预测结果不稳定？</h3>
+                            <div class="answer">
+                                <p>1. 设置随机种子：</p>
+                                <div class="code-block">
+                                    <code>import torch
+import numpy as np
+import random
+
+def set_seed(seed):
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+
+set_seed(42)</code>
+                                </div>
+                                <p>2. 使用模型集成：</p>
+                                <div class="code-block">
+                                    <code>predictions = []
+for model in ensemble_models:
+    pred = model.predict(input_data)
+    predictions.append(pred)
+    
+final_prediction = np.mean(predictions, axis=0)</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h2>数据问题</h2>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <h3>Q: 数据采集失败如何处理？</h3>
+                            <div class="answer">
+                                <p>1. 检查代理状态：</p>
+                                <div class="code-block">
+                                    <code>async def check_proxy_health():
+    proxy_pool = ProxyPool()
+    results = []
+    
+    for proxy in await proxy_pool.get_all():
+        is_valid = await proxy_pool.validate_proxy(proxy)
+        if not is_valid:
+            await proxy_pool.remove_proxy(proxy)
+            
+    await proxy_pool.refill_pool()</code>
+                                </div>
+                                <p>2. 启用备用数据源：</p>
+                                <div class="code-block">
+                                    <code>class DataSourceManager:
+    def __init__(self):
+        self.primary_source = PrimaryDataSource()
+        self.backup_source = BackupDataSource()
+        
+    async def get_data(self):
+        try:
+            return await self.primary_source.fetch()
+        except Exception:
+            return await self.backup_source.fetch()</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>还有问题？</h2>
+                <p>如果以上内容没有解决您的问题，您可以：</p>
+                <div class="button-group">
+                    <a href="../optimize/index.html" class="btn btn-primary">查看优化建议</a>
+                    <a href="../data/index.html" class="btn btn-secondary">返回数据系统</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

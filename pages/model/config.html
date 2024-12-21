@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型配置 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>4.2 模型配置</h1>
+
+            <div class="prerequisites">
+                <h2>配置前检查</h2>
+                <div class="checklist">
+                    <label class="check-item">
+                        <input type="checkbox">
+                        已完成模型下载
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        LMStudio正常运行
+                    </label>
+                    <label class="check-item">
+                        <input type="checkbox">
+                        GPU可用且显存充足
+                    </label>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h2>基础配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. ChatGLM2-6B-int4 配置</h3>
+                        <div class="code-block">
+                            <code># 基础参数
+模型路径: D:\models\chatglm2-6b-int4
+上下文长度: 2048
+温度: 0.7
+Top P: 0.9
+重复惩罚: 1.1</code>
+                        </div>
+                        <div class="code-block">
+                            <code># 性能参数
+GPU内存限制: 6GB
+CPU线程数: 6
+批处理大小: 1</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. Llama-2-7b-chat-hf-q4 配置</h3>
+                        <div class="code-block">
+                            <code># 基础参数
+模型路径: D:\models\llama-2-7b-chat-q4
+上下文长度: 4096
+温度: 0.8
+Top P: 0.95
+重复惩罚: 1.2</code>
+                        </div>
+                        <div class="code-block">
+                            <code># 性能参数
+GPU内存限制: 6GB
+CPU线程数: 6
+批处理大小: 1</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. Vicuna-7b-q4 配置</h3>
+                        <div class="code-block">
+                            <code># 基础参数
+模型路径: D:\models\vicuna-7b-q4
+上下文长度: 2048
+温度: 0.7
+Top P: 0.9
+重复惩罚: 1.1</code>
+                        </div>
+                        <div class="code-block">
+                            <code># 性能参数
+GPU内存限制: 6GB
+CPU线程数: 6
+批处理大小: 1</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="advanced-config">
+                <h2>高级配置</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 内存优化</h3>
+                        <div class="code-block">
+                            <code># 显存优化
+使用8-bit量化: false
+使用4-bit量化: true
+启用CPU卸载: false
+启用注意力分块: true</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 推理优化</h3>
+                        <div class="code-block">
+                            <code># 推理设置
+使用半精度: true
+启用KV缓存: true
+动态批处理: false
+并行处理: true</code>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <h3>3. 系统优化</h3>
+                        <div class="code-block">
+                            <code># 系统设置
+CUDA线程数: 4
+CPU优先级: 高
+内存预分配: true
+缓存清理间隔: 1000</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification">
+                <h2>配置验证</h2>
+                <div class="step-list">
+                    <div class="step">
+                        <h3>1. 性能测试</h3>
+                        <ol>
+                            <li>测试首次加载时间</li>
+                            <li>测试推理速度</li>
+                            <li>监控显存使用</li>
+                            <li>检查CPU占用</li>
+                        </ol>
+                    </div>
+
+                    <div class="step">
+                        <h3>2. 稳定性测试</h3>
+                        <ol>
+                            <li>连续对话测试</li>
+                            <li>长文本处理测试</li>
+                            <li>并发请求测试</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="troubleshooting">
+                <h2>常见问题</h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>显存不足</summary>
+                        <div class="solution">
+                            <p>尝试以下方法：</p>
+                            <ul>
+                                <li>降低批处理大小</li>
+                                <li>减少上下文长度</li>
+                                <li>启用CPU卸载</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>推理速度慢</summary>
+                        <div class="solution">
+                            <p>优化建议：</p>
+                            <ul>
+                                <li>增加GPU内存限制</li>
+                                <li>调整线程数</li>
+                                <li>启用半精度计算</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>下一步</h2>
+                <p>模型配置完成后，继续设计提示词模板：</p>
+                <div class="button-group">
+                    <a href="prompt.html" class="btn btn-primary">提示词设计</a>
+                    <a href="../faq/index.html#config" class="btn btn-secondary">配置常见问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

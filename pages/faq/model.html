@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型问题 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>6.2 模型问题</h1>
+
+            <div class="faq-section" id="download">
+                <h2>模型下载问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>模型下载中断怎么办？</summary>
+                        <div class="answer">
+                            <p>解决方案：</p>
+                            <ol>
+                                <li>使用断点续传工具：
+                                    <div class="code-block">
+                                        <code>wget -c https://huggingface.co/model/download/link</code>
+                                    </div>
+                                </li>
+                                <li>使用下载管理器：
+                                    <div class="code-block">
+                                        <code>aria2c -x 16 -s 16 https://huggingface.co/model/download/link</code>
+                                    </div>
+                                </li>
+                                <li>使用Git LFS：
+                                    <div class="code-block">
+                                        <code>git lfs install
+git clone https://huggingface.co/model/repo</code>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>下载速度太慢怎么办？</summary>
+                        <div class="answer">
+                            <p>优化建议：</p>
+                            <ul>
+                                <li>使用镜像站点：
+                                    <div class="code-block">
+                                        <code># 修改hosts
+185.199.108.133 raw.githubusercontent.com
+185.199.109.133 raw.githubusercontent.com
+185.199.110.133 raw.githubusercontent.com
+185.199.111.133 raw.githubusercontent.com</code>
+                                    </div>
+                                </li>
+                                <li>使用代理下载：
+                                    <div class="code-block">
+                                        <code>export https_proxy=http://proxy.example.com:port
+huggingface-cli download model_name</code>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="faq-section" id="loading">
+                <h2>模型加载问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>显存不足怎么处理？</summary>
+                        <div class="answer">
+                            <p>优化方法：</p>
+                            <ol>
+                                <li>使用量化版本：
+                                    <div class="code-block">
+                                        <code>model = AutoModelForCausalLM.from_pretrained(
+    "model_name",
+    device_map="auto",
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4"
+)</code>
+                                    </div>
+                                </li>
+                                <li>启用梯度检查点：
+                                    <div class="code-block">
+                                        <code>model.gradient_checkpointing_enable()
+model.enable_input_require_grads()</code>
+                                    </div>
+                                </li>
+                                <li>使用CPU卸载：
+                                    <div class="code-block">
+                                        <code>device_map = {
+    'transformer.word_embeddings': 'cpu',
+    'transformer.final_layernorm': 'cpu',
+    'lm_head': 'cpu'
+}</code>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="faq-section" id="inference">
+                <h2>推理性能问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>推理速度慢怎么优化？</summary>
+                        <div class="answer">
+                            <p>优化建议：</p>
+                            <ul>
+                                <li>使用半精度推理：
+                                    <div class="code-block">
+                                        <code>model = model.half().cuda()</code>
+                                    </div>
+                                </li>
+                                <li>批量处理：
+                                    <div class="code-block">
+                                        <code>with torch.no_grad():
+    outputs = model.generate(
+        input_ids,
+        max_length=512,
+        num_beams=4,
+        batch_size=8
+    )</code>
+                                    </div>
+                                </li>
+                                <li>使用CUDA图：
+                                    <div class="code-block">
+                                        <code>g = torch.cuda.CUDAGraph()
+with torch.cuda.graph(g):
+    output = model(input_ids)</code>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="faq-section" id="accuracy">
+                <h2>预测准确性问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>预测结果不准确怎么办？</summary>
+                        <div class="answer">
+                            <p>改进方法：</p>
+                            <ul>
+                                <li>调整生成参数：
+                                    <div class="code-block">
+                                        <code>generation_config = GenerationConfig(
+    temperature=0.7,
+    top_p=0.9,
+    repetition_penalty=1.2,
+    max_new_tokens=512
+)</code>
+                                    </div>
+                                </li>
+                                <li>优化提示词：
+                                    <div class="code-block">
+                                        <code>prompt = f"""
+你是一个专业的体育分析师，请基于以下信息进行分析：
+1. 历史交锋记录
+2. 近期比赛状态
+3. 球员伤病情况
+4. 天气场地因素
+
+{match_info}
+
+请给出详细的分析和预测：
+"""</code>
+                                    </div>
+                                </li>
+                                <li>使用模型组合：
+                                    <div class="code-block">
+                                        <code># 多模型投票
+predictions = []
+for model in models:
+    pred = model.predict(input_data)
+    predictions.append(pred)
+    
+final_pred = voting(predictions)</code>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>其他问题</h2>
+                <p>如果以上内容未能解决您的问题，请查看：</p>
+                <div class="button-group">
+                    <a href="data.html" class="btn btn-primary">数据问题</a>
+                    <a href="env.html" class="btn btn-secondary">环境问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

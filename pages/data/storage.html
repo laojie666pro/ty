@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>存储系统 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>5.3 存储系统</h1>
+
+            <div class="database-design">
+                <h2>数据库设计</h2>
+                <div class="design-list">
+                    <div class="design-item">
+                        <h3>1. MongoDB集群</h3>
+                        <div class="code-block">
+                            <code># MongoDB配置
+# mongod.conf
+replication:
+  replSetName: "sports_rs"
+  
+security:
+  keyFile: "/etc/mongodb/keyfile"
+  authorization: "enabled"
+  
+net:
+  bindIp: "0.0.0.0"
+  port: 27017
+  
+storage:
+  dbPath: "/var/lib/mongodb"
+  journal:
+    enabled: true
+    
+systemLog:
+  destination: "file"
+  path: "/var/log/mongodb/mongod.log"
+  logAppend: true
+
+# 初始化副本集
+rs.initiate({
+  _id: "sports_rs",
+  members: [
+    {_id: 0, host: "mongo1:27017", priority: 2},
+    {_id: 1, host: "mongo2:27017", priority: 1},
+    {_id: 2, host: "mongo3:27017", arbiterOnly: true}
+  ]
+})</code>
+                        </div>
+                    </div>
+
+                    <div class="design-item">
+                        <h3>2. 数据模型</h3>
+                        <div class="code-block">
+                            <code># MongoDB数据模型
+from mongoengine import *
+
+class Team(Document):
+    name = StringField(required=True, unique=True)
+    country = StringField(required=True)
+    league = StringField(required=True)
+    meta = {
+        'indexes': ['name', 'country', 'league'],
+        'collection': 'teams'
+    }
+
+class Match(Document):
+    match_id = StringField(required=True, unique=True)
+    home_team = ReferenceField(Team, required=True)
+    away_team = ReferenceField(Team, required=True)
+    start_time = DateTimeField(required=True)
+    score = StringField()
+    stats = DictField()
+    weather = StringField()
+    meta = {
+        'indexes': [
+            'match_id',
+            'home_team',
+            'away_team',
+            ('home_team', 'away_team'),
+            'start_time'
+        ],
+        'collection': 'matches'
+    }</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cache-system">
+                <h2>缓存系统</h2>
+                <div class="cache-list">
+                    <div class="cache-item">
+                        <h3>1. Redis集群</h3>
+                        <div class="code-block">
+                            <code># Redis集群配置
+# redis.conf
+port 6379
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+appendonly yes
+
+# 集群初始化
+redis-cli --cluster create \
+    127.0.0.1:7000 127.0.0.1:7001 \
+    127.0.0.1:7002 127.0.0.1:7003 \
+    127.0.0.1:7004 127.0.0.1:7005 \
+    --cluster-replicas 1
+
+# 缓存管理器
+class CacheManager:
+    def __init__(self, redis_cluster):
+        self.redis = redis_cluster
+        self.default_ttl = 3600  # 1小时
+        
+    async def get_or_set(self, key, fetch_func, ttl=None):
+        # 尝试从缓存获取
+        data = await self.redis.get(key)
+        if data:
+            return json.loads(data)
+            
+        # 获取新数据
+        data = await fetch_func()
+        
+        # 存入缓存
+        await self.redis.setex(
+            key,
+            ttl or self.default_ttl,
+            json.dumps(data)
+        )
+        
+        return data</code>
+                        </div>
+                    </div>
+
+                    <div class="cache-item">
+                        <h3>2. 缓存策略</h3>
+                        <div class="code-block">
+                            <code># 多级缓存策略
+class MultiLevelCache:
+    def __init__(self):
+        self.local_cache = LRUCache(1000)  # 本地缓存
+        self.redis_cache = RedisCluster()  # Redis集群
+        self.mongo_db = MongoClient()      # MongoDB
+        
+    async def get_match_data(self, match_id):
+        # 1. 检查本地缓存
+        data = self.local_cache.get(match_id)
+        if data:
+            return data
+            
+        # 2. 检查Redis缓存
+        data = await self.redis_cache.get(f'match:{match_id}')
+        if data:
+            self.local_cache.set(match_id, data)
+            return data
+            
+        # 3. 从MongoDB读取
+        data = await self.mongo_db.matches.find_one(
+            {'match_id': match_id}
+        )
+        
+        if data:
+            # 更新缓存
+            await self.redis_cache.setex(
+                f'match:{match_id}',
+                3600,
+                data
+            )
+            self.local_cache.set(match_id, data)
+            
+        return data</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="backup-system">
+                <h2>备份系统</h2>
+                <div class="backup-list">
+                    <div class="backup-item">
+                        <h3>1. 自动备份</h3>
+                        <div class="code-block">
+                            <code># 备份脚本
+#!/bin/bash
+
+# 配置
+MONGO_HOST="localhost"
+MONGO_PORT="27017"
+BACKUP_DIR="/backup/mongodb"
+DATE=$(date +%Y%m%d)
+
+# 创建备份目录
+mkdir -p $BACKUP_DIR/$DATE
+
+# MongoDB备份
+mongodump \
+    --host $MONGO_HOST \
+    --port $MONGO_PORT \
+    --out $BACKUP_DIR/$DATE \
+    --gzip
+
+# 删除旧备份
+find $BACKUP_DIR -type d -mtime +7 -exec rm -rf {} \;
+
+# 发送通知
+if [ $? -eq 0 ]; then
+    echo "Backup completed successfully" | \
+    mail -s "MongoDB Backup Status" admin@example.com
+else
+    echo "Backup failed" | \
+    mail -s "MongoDB Backup Failed" admin@example.com
+fi</code>
+                        </div>
+                    </div>
+
+                    <div class="backup-item">
+                        <h3>2. 数据恢复</h3>
+                        <div class="code-block">
+                            <code># 恢复脚本
+#!/bin/bash
+
+# 配置
+MONGO_HOST="localhost"
+MONGO_PORT="27017"
+BACKUP_DIR="/backup/mongodb"
+RESTORE_DATE=$1
+
+# 验证参数
+if [ -z "$RESTORE_DATE" ]; then
+    echo "Please provide restore date (YYYYMMDD)"
+    exit 1
+fi
+
+# 检查备份是否存在
+if [ ! -d "$BACKUP_DIR/$RESTORE_DATE" ]; then
+    echo "Backup for date $RESTORE_DATE not found"
+    exit 1
+fi
+
+# 停止应用服务
+systemctl stop sports-app
+
+# 恢复数据
+mongorestore \
+    --host $MONGO_HOST \
+    --port $MONGO_PORT \
+    --gzip \
+    --drop \
+    $BACKUP_DIR/$RESTORE_DATE
+
+# 启动应用服务
+systemctl start sports-app</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>完成配置</h2>
+                <p>存储系统配置完成后，您可以：</p>
+                <div class="button-group">
+                    <a href="../faq/index.html" class="btn btn-primary">查看常见问题</a>
+                    <a href="crawler.html" class="btn btn-secondary">返回爬虫系统</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

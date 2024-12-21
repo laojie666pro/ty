@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据问题 - 体育赛事预测系统</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <!-- 导航栏 -->
+    </nav>
+
+    <main class="main-content">
+        <div class="content-section">
+            <h1>6.3 数据问题</h1>
+
+            <div class="faq-section" id="crawler">
+                <h2>爬虫问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>IP被封禁怎么处理？</summary>
+                        <div class="answer">
+                            <p>解决方案：</p>
+                            <ol>
+                                <li>使用代理池：
+                                    <div class="code-block">
+                                        <code>DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'sports_crawler.middlewares.ProxyMiddleware': 100,
+}
+
+class ProxyMiddleware:
+    def process_request(self, request, spider):
+        proxy = get_proxy()
+        request.meta['proxy'] = proxy</code>
+                                    </div>
+                                </li>
+                                <li>添加请求延迟：
+                                    <div class="code-block">
+                                        <code>DOWNLOAD_DELAY = 3
+RANDOMIZE_DOWNLOAD_DELAY = True
+CONCURRENT_REQUESTS_PER_DOMAIN = 8</code>
+                                    </div>
+                                </li>
+                                <li>伪装请求头：
+                                    <div class="code-block">
+                                        <code>DEFAULT_REQUEST_HEADERS = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    'User-Agent': 'Mozilla/5.0 ...'
+}</code>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>数据抓取失败怎么办？</summary>
+                        <div class="answer">
+                            <p>处理方法：</p>
+                            <ul>
+                                <li>重试机制：
+                                    <div class="code-block">
+                                        <code>RETRY_ENABLED = True
+RETRY_TIMES = 3
+RETRY_HTTP_CODES = [500, 502, 503, 504, 522, 524, 408, 429]</code>
+                                    </div>
+                                </li>
+                                <li>错误处理：
+                                    <div class="code-block">
+                                        <code>def parse(self, response):
+    try:
+        data = response.css('.data-item::text').get()
+        if not data:
+            raise ValueError('Data not found')
+        yield {'data': data}
+    except Exception as e:
+        self.logger.error(f'Parse error: {e}')
+        yield Request(
+            response.url,
+            callback=self.parse,
+            dont_filter=True
+        )</code>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="faq-section" id="storage">
+                <h2>存储问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>MongoDB连接失败？</summary>
+                        <div class="answer">
+                            <p>检查以下内容：</p>
+                            <ol>
+                                <li>连接配置：
+                                    <div class="code-block">
+                                        <code>MONGODB_URI = 'mongodb://username:password@host:port/'
+MONGODB_DATABASE = 'sports'
+MONGODB_COLLECTION = 'matches'
+
+# 测试连接
+from pymongo import MongoClient
+client = MongoClient(MONGODB_URI)
+db = client[MONGODB_DATABASE]
+collection = db[MONGODB_COLLECTION]</code>
+                                    </div>
+                                </li>
+                                <li>认证问题：
+                                    <div class="code-block">
+                                        <code>use admin
+db.createUser({
+    user: "username",
+    pwd: "password",
+    roles: ["readWrite"]
+})</code>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Redis缓存失效？</summary>
+                        <div class="answer">
+                            <p>解决方案：</p>
+                            <ul>
+                                <li>检查配置：
+                                    <div class="code-block">
+                                        <code>REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_PASSWORD = 'password'
+
+# 测试连接
+import redis
+r = redis.Redis(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+    db=REDIS_DB,
+    password=REDIS_PASSWORD
+)</code>
+                                    </div>
+                                </li>
+                                <li>设置过期时间：
+                                    <div class="code-block">
+                                        <code># 设置缓存
+r.setex('key', 3600, 'value')  # 1小时过期
+
+# 检查过期时间
+ttl = r.ttl('key')</code>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="faq-section" id="processing">
+                <h2>数据处理问题</h2>
+                <div class="question-list">
+                    <details>
+                        <summary>数据清洗效果不好？</summary>
+                        <div class="answer">
+                            <p>优化建议：</p>
+                            <ul>
+                                <li>规范化处理：
+                                    <div class="code-block">
+                                        <code>def clean_data(data):
+    # 移除特殊字符
+    data = re.sub(r'[^\w\s]', '', data)
+    
+    # 统一格式
+    data = data.lower().strip()
+    
+    # 处理缺失值
+    if not data:
+        data = 'unknown'
+        
+    return data</code>
+                                    </div>
+                                </li>
+                                <li>数据验证：
+                                    <div class="code-block">
+                                        <code>from pydantic import BaseModel, validator
+
+class MatchData(BaseModel):
+    team1: str
+    team2: str
+    score: str
+    date: str
+    
+    @validator('score')
+    def validate_score(cls, v):
+        if not re.match(r'\d+-\d+', v):
+            raise ValueError('Invalid score format')
+        return v</code>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h2>其他问题</h2>
+                <p>如果以上内容未能解决您的问题，请查看：</p>
+                <div class="button-group">
+                    <a href="env.html" class="btn btn-primary">环境问题</a>
+                    <a href="model.html" class="btn btn-secondary">模型问题</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html> 
